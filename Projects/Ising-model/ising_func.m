@@ -67,22 +67,22 @@ end
 figure(102)
 set(figure(1),'position',[1000,300,700,700])
 pcolor(x)
-shading flat 
+shading flat
+axis square
 axis ij
 colormap(bone(2));
-%text1=sprintf(...
-%    '%s - Lattus Size = %d , Temperature %3.1f , Interations %d E = %d',...
-%    'Ising Model',size,T,frames*itterations,energy);
-%title(text1)
 text1=sprintf(...
-'%s-LattusSize=%d,Temperature%3.1f,Interations%dE=%d',...
-'IsingModel',size,T,0,energy);
+'%s-GridSize = %d Temperature %3.1f Interations %d E= %d',...
+'Colormap',size,T,0,energy);
 title(text1)
 dir='C:\Users\Rolzroyz\Pictures\Temp\';
-last='.png';
-filename=[dir text1 last];
+if isdir(dir)==0
+        mkdir(dir)
+end
+Suffix='.png';
+filename=[dir text1 Suffix];
 print('-dpng',filename);
-
+%%
 tic
 for ii = 1:frames         %outer loop, used to control display
     for iii = 1:itterations   %inner loop, used to itterate between frames
@@ -105,12 +105,14 @@ for ii = 1:frames         %outer loop, used to control display
     axis square
     axis ij
     text2=sprintf(...
-    '%s-LattusSize=%d,Temperature%3.1f,Interations%dE=%d',...
-    'IsingModel',size,T,ii*itterations,energy);
+    '%s-LattusSize=%d,Temperature%3.1f,Interations%d',...
+    'IsingModel',size,T,ii*itterations);
     title(text2)
-    dir='C:\Users\Rolzroyz\Pictures\Temp\';
-    last='.png';
-    filename=[dir text2 last];
+    dir=sprintf('C:\\Users\\Rolzroyz\\Pictures\\Temp\\T=%3.1f\\',T);
+    if isdir(dir)==0
+        mkdir(dir)
+    end
+    filename=[dir text2 Suffix];
     print('-dpng',filename);
     pause(delay)
 end
