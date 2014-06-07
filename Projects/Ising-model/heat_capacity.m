@@ -12,7 +12,6 @@ x = initialize([size+1],bias);  %create intial array
 
 heat_range = [2:0.5:2.5];         %temperature range
 for i = 1:length(heat_range)    %run core modeling program
-     disp(sprintf('i = %d',i))  %debuging
      [foo,fox,x,magni] = ising_func(x,size,heat_range(i)... retrive values
          ,itterations,frames,delay); %of interest from ising model
      cv(i)=foo;                 %Heat capacity 

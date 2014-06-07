@@ -57,14 +57,19 @@ function [ heat_capacity_out,energy_out,x,total_mag ] = ising_func( x,size, T ,i
 %delay = 1/60
 %--------------------
 
+%setup memory blocks
 total_mag=zeros([1,itterations.*frames]);
+average_energy=zeros([1,itterations.*frames]);
+average_energy_sq=zeros([1,itterations.*frames]);
+
 energy = 0;
 for i =1:size  %calculate intial system energy
     for ii = 1:size
         energy=energy+initU(i,ii,x);
     end
 end
-figure(102)
+
+figure(102)   %plot initial checkerboard
 set(figure(1),'position',[1000,300,700,700])
 pcolor(x)
 shading flat
@@ -75,7 +80,8 @@ text1=sprintf(...
 '%s-GridSize = %d Temperature %3.1f Interations %d E= %d',...
 'Colormap',size,T,0,energy);
 title(text1)
-dir='C:\Users\Rolzroyz\Pictures\Temp\';
+%dir='C:\Users\Rolzroyz\Pictures\Temp\';
+dir=sprintf('C:\\Users\\Rolzroyz\\Pictures\\Temp\\T=%3.1f\\',T);
 if isdir(dir)==0
         mkdir(dir)
 end
@@ -100,7 +106,7 @@ for ii = 1:frames         %outer loop, used to control display
         total_mag(index) = sum(sum(x(1:size,1:size))); %magnatization
         total_energy(index)=energy;
     end
-    pcolor(x) %plot data 
+    pcolor(x) %plot data
     shading flat   
     axis square
     axis ij
@@ -108,10 +114,7 @@ for ii = 1:frames         %outer loop, used to control display
     '%s-LattusSize=%d,Temperature%3.1f,Interations%d',...
     'IsingModel',size,T,ii*itterations);
     title(text2)
-    dir=sprintf('C:\\Users\\Rolzroyz\\Pictures\\Temp\\T=%3.1f\\',T);
-    if isdir(dir)==0
-        mkdir(dir)
-    end
+    
     filename=[dir text2 Suffix];
     print('-dpng',filename);
     pause(delay)
@@ -121,18 +124,20 @@ toc
 %%
 figure(102) %histogram of average spin
 hist(total_mag,(max(total_mag)-min(total_mag))/2);
-xlabel('net magnitization')
-ylabel('total occurances')
+xlabel('Net Magnitization')
+ylabel('Total Occurances')
 title(text2)
+
+text3=sprintf('Average System Magnitization - T=%3.1f',T);
+filename=[dir text3 Suffix];
+print('-dpng',filename);
+
 %%
-average_energy=zeros([1,itterations.*frames]);
-average_energy_sq=zeros([1,itterations.*frames]);
 current_average=total_energy(1);
 for i=2:length(total_energy) %create running average of system energy
     average_energy(i)=((i-1)*current_average+total_energy(i))/i;
     current_average = average_energy(i);
 end
-
 figure(105)
 subplot(211)
 plot([1:1:length(total_energy)],total_energy,'b'...
@@ -153,6 +158,14 @@ plot(1:1:length(total_energy),heat_capacity);
 xlabel('itterations')
 ylabel('heat capacity')
 title('Time evolution of heat capacity')
+
+text4=sprintf('Average System Energy At - T=%3.1f',T); %save energy/cv graphs
+filename=[dir text4 Suffix];
+print('-dpng',filename);
+
+%output varibles
+%x=x (not needed)
+%mag_out = sum(total_mag)/length(total_mag)  %standardization pending
 energy_out = average_energy(end);
 heat_capacity_out = heat_capacity(end);
 end
