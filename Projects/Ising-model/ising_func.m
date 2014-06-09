@@ -153,7 +153,7 @@ for i=2:length(total_energy) %create running average of system energy
     average_energy_sq(i)=((i-1)*current_average+(total_energy(i)).^2)/i;
     current_average = average_energy_sq(i);
 end
-heat_capacity=(average_energy_sq-average_energy.^2)/T;
+heat_capacity=(average_energy_sq-average_energy.^2)/T/(size.^2); %heat capcity per unit "volume"
 plot(1:1:length(total_energy),heat_capacity);
 xlabel('itterations')
 ylabel('heat capacity')
