@@ -1,9 +1,9 @@
 clear all
 %%variables
-size = 20 ;         %width of square lattus
-T = 10;           %temperature elsilon/kt
-itterations = 10000;    %loops per frame
-frames = 10 ;    %frames shown
+size = 10 ;         %width of square lattus
+T = 4;           %temperature elsilon/kt
+itterations = 1;    %loops per frame
+frames = 100 ;    %frames shown
 %delay = 1;
 delay = 1/60;       %time per frame (a man can dream)
 %%
